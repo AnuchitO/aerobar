@@ -113,41 +113,45 @@ until you pick **Refresh** -- so it's worth doing.
 ## 4. How to build
 
 ```bash
-git clone https://github.com/AnuchitO/workspaces.git
-cd workspaces
-swift build -c release
+git clone https://github.com/AnuchitO/aerobar.git
+cd aerobar
+make build
 ```
 
-This produces a bare executable at `.build/release/AeroBar`,
-useful for development (`swift run`), but **not** enough on its own for
-Launch at Login or a Dock-free launch from Finder -- for that you need a
-real `.app` bundle, built with:
+`make build` is a thin wrapper around `swift build -c release`, producing
+a bare executable at `.build/release/AeroBar` -- useful for development
+(`make dev`, i.e. `swift run`), but **not** enough on its own for Launch
+at Login or a Dock-free launch from Finder -- for that you need a real
+`.app` bundle:
 
 ```bash
-Scripts/build-app.sh release
+make app
 ```
 
-which produces `.build/AeroBar.app` (ad-hoc code signed, which
-is required for `SMAppService`/Launch at Login to work).
+which runs `Scripts/build-app.sh` and produces `.build/AeroBar.app`
+(ad-hoc code signed, which is required for `SMAppService`/Launch at Login
+to work).
 
 ## 5. How to install
 
 ```bash
-Scripts/install.sh
+make install
 ```
 
-Builds the release `.app` and copies it to `/Applications/AeroBar.app`.
-Run this again any time you rebuild.
+Runs `Scripts/install.sh`, which builds the release `.app` and copies it
+to `/Applications/AeroBar.app`. Run this again any time you pull changes
+or rebuild. `make run` does the same and then opens the app in one step.
 
 ## 6. How to launch
 
 ```bash
-open /Applications/AeroBar.app
+make run
 ```
 
-Or double-click it in Finder. It will not appear in the Dock or the
-Cmd+Tab switcher (menu-bar-only app, `LSUIElement = true`); look for the
-workspace numbers and a small grid icon in the menu bar.
+or `open /Applications/AeroBar.app`, or double-click it in Finder. It
+will not appear in the Dock or the Cmd+Tab switcher (menu-bar-only app,
+`LSUIElement = true`); look for the workspace numbers and a small grid
+icon in the menu bar.
 
 ## 7. How to enable Launch at Login
 
@@ -341,6 +345,7 @@ cap the count.
 ```
 AeroBar/
 ├── README.md
+├── Makefile                  # make build / app / install / run / dev / clean
 ├── Package.swift
 ├── Resources/
 │   ├── Info.plist            # LSUIElement, bundle id, etc. for the .app
@@ -365,7 +370,7 @@ AeroBar/
 ## 17. Uninstall / go back to SketchyBar
 
 ```bash
-rm -rf /Applications/AeroBar.app
+make uninstall   # or: rm -rf /Applications/AeroBar.app
 rm -rf ~/.config/aerospace-menubar
 ```
 
