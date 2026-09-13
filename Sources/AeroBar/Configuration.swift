@@ -72,7 +72,7 @@ struct Configuration {
     /// notices none exists (see `load()`) and when the user picks "Open
     /// Configuration". Kept in one place so both paths always agree.
     static let defaultTemplateContents = """
-        # Workspaces configuration.
+        # AeroBar configuration.
         # Leave `workspaces` unset to auto-discover from AeroSpace itself.
         # workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
         font-size = 13

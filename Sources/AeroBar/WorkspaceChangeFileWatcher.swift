@@ -19,7 +19,7 @@ import Darwin
 /// fallback, so the app works correctly even before this line is added,
 /// or if the watch below can't be established for any reason.
 final class WorkspaceChangeFileWatcher {
-    private let queue = DispatchQueue(label: "com.anuchito.Workspaces.file-watch")
+    private let queue = DispatchQueue(label: "com.anuchito.AeroBar.file-watch")
     private var fileSource: DispatchSourceFileSystemObject?
     private var directorySource: DispatchSourceFileSystemObject?
     private var fileFD: Int32 = -1

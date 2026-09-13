@@ -5,7 +5,7 @@ import ServiceManagement
 /// the modern, non-deprecated API for registering an app as a login item;
 /// it requires the app to be running from a proper .app bundle (see
 /// Scripts/build-app.sh), which is why this project's build/install
-/// process always produces Workspaces.app rather than a bare binary.
+/// process always produces AeroBar.app rather than a bare binary.
 final class LoginItemManager {
     var isEnabled: Bool {
         SMAppService.mainApp.status == .enabled

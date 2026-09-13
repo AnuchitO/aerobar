@@ -38,7 +38,7 @@ final class WorkspaceManager {
     private var fileWatcher: WorkspaceChangeFileWatcher?
     private var launchObserver: NSObjectProtocol?
     private var terminateObserver: NSObjectProtocol?
-    private let workQueue = DispatchQueue(label: "com.anuchito.Workspaces.workspace-events")
+    private let workQueue = DispatchQueue(label: "com.anuchito.AeroBar.workspace-events")
 
     init(configuration: Configuration, client: AeroSpaceClient = AeroSpaceClient()) {
         self.configuration = configuration

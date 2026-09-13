@@ -1,4 +1,4 @@
-# Workspaces
+# AeroBar
 
 A tiny, native macOS menu-bar utility that replaces SketchyBar's workspace
 indicator with real `NSStatusItem`s in the actual system menu bar. Buttons
@@ -95,7 +95,7 @@ exec-on-workspace-change = [
 
 Then `aerospace reload-config` (or quit/relaunch AeroSpace). This writes
 the focused workspace name to a small file every time it changes;
-Workspaces watches that file with a kqueue file-system event (via
+AeroBar watches that file with a kqueue file-system event (via
 `DispatchSource.makeFileSystemObjectSource`) -- a passive kernel
 subscription, not a loop that checks anything on a timer -- and updates
 the instant it's written.
@@ -118,7 +118,7 @@ cd workspaces
 swift build -c release
 ```
 
-This produces a bare executable at `.build/release/Workspaces`,
+This produces a bare executable at `.build/release/AeroBar`,
 useful for development (`swift run`), but **not** enough on its own for
 Launch at Login or a Dock-free launch from Finder -- for that you need a
 real `.app` bundle, built with:
@@ -127,7 +127,7 @@ real `.app` bundle, built with:
 Scripts/build-app.sh release
 ```
 
-which produces `.build/Workspaces.app` (ad-hoc code signed, which
+which produces `.build/AeroBar.app` (ad-hoc code signed, which
 is required for `SMAppService`/Launch at Login to work).
 
 ## 5. How to install
@@ -136,13 +136,13 @@ is required for `SMAppService`/Launch at Login to work).
 Scripts/install.sh
 ```
 
-Builds the release `.app` and copies it to `/Applications/Workspaces.app`.
+Builds the release `.app` and copies it to `/Applications/AeroBar.app`.
 Run this again any time you rebuild.
 
 ## 6. How to launch
 
 ```bash
-open /Applications/Workspaces.app
+open /Applications/AeroBar.app
 ```
 
 Or double-click it in Finder. It will not appear in the Dock or the
@@ -154,8 +154,8 @@ workspace numbers and a small grid icon in the menu bar.
 Click the small grid icon (to the right of the workspace numbers) →
 **Launch at Login**. This uses `SMAppService.mainApp` (the current,
 non-deprecated API), so it requires the app to be running from
-`/Applications/Workspaces.app` (or another `.app` bundle location)
-rather than the bare `.build/release/Workspaces` binary.
+`/Applications/AeroBar.app` (or another `.app` bundle location)
+rather than the bare `.build/release/AeroBar` binary.
 
 ## 8. How workspace detection works
 
@@ -291,13 +291,13 @@ cap the count.
 - **Too many or too few buttons on a notched display.** Set
   `max-visible-workspaces` in config.toml to the count you want.
 - **Launch at Login doesn't stick.** Make sure you're running the app
-  from `/Applications/Workspaces.app` (built via `Scripts/install.sh`),
+  from `/Applications/AeroBar.app` (built via `Scripts/install.sh`),
   not the bare `.build` binary -- `SMAppService` requires a real,
   code-signed `.app` bundle.
 - **Viewing logs:**
 
   ```bash
-  log stream --predicate 'subsystem == "com.anuchito.Workspaces"' --level info
+  log stream --predicate 'subsystem == "com.anuchito.AeroBar"' --level info
   ```
 
   Logging only happens on real state changes (a workspace switch,
@@ -339,7 +339,7 @@ cap the count.
 ## 16. Project structure
 
 ```
-Workspaces/
+AeroBar/
 ├── README.md
 ├── Package.swift
 ├── Resources/
@@ -348,7 +348,7 @@ Workspaces/
 ├── Scripts/
 │   ├── build-app.sh          # swift build + assemble + codesign .app
 │   └── install.sh            # build-app.sh + copy to /Applications
-└── Sources/Workspaces/
+└── Sources/AeroBar/
     ├── main.swift                    # NSApplication bootstrap
     ├── AppDelegate.swift             # wires everything together, accessory policy
     ├── AeroSpaceClient.swift         # Process-based CLI wrapper (no shell, no PATH dependency)
@@ -365,7 +365,7 @@ Workspaces/
 ## 17. Uninstall / go back to SketchyBar
 
 ```bash
-rm -rf /Applications/Workspaces.app
+rm -rf /Applications/AeroBar.app
 rm -rf ~/.config/aerospace-menubar
 ```
 

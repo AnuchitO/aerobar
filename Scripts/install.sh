@@ -1,5 +1,5 @@
 #!/bin/bash
-# Builds Workspaces.app and installs it into /Applications.
+# Builds AeroBar.app and installs it into /Applications.
 #
 # Usage: Scripts/install.sh
 set -euo pipefail
@@ -9,15 +9,15 @@ cd "$ROOT_DIR"
 
 Scripts/build-app.sh release
 
-DEST="/Applications/Workspaces.app"
+DEST="/Applications/AeroBar.app"
 
 echo "==> Installing to $DEST"
 if [ -d "$DEST" ]; then
     echo "    (removing previous install)"
     rm -rf "$DEST"
 fi
-cp -R ".build/Workspaces.app" "$DEST"
+cp -R ".build/AeroBar.app" "$DEST"
 
 echo "==> Installed."
 echo "    Launch it with:  open $DEST"
-echo "    Or from Finder:  /Applications/Workspaces.app"
+echo "    Or from Finder:  /Applications/AeroBar.app"

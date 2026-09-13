@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleExecutable</key>
-    <string>Workspaces</string>
+    <string>AeroBar</string>
     <key>CFBundleIdentifier</key>
-    <string>com.anuchito.Workspaces</string>
+    <string>com.anuchito.AeroBar</string>
     <key>CFBundleName</key>
-    <string>Workspaces</string>
+    <string>AeroBar</string>
     <key>CFBundleDisplayName</key>
-    <string>Workspaces</string>
+    <string>AeroBar</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>

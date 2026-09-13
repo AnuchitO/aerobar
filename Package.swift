@@ -2,14 +2,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "Workspaces",
+    name: "AeroBar",
     platforms: [
         .macOS(.v13)
     ],
     targets: [
         .executableTarget(
-            name: "Workspaces",
-            path: "Sources/Workspaces"
+            name: "AeroBar",
+            path: "Sources/AeroBar"
         )
     ]
 )

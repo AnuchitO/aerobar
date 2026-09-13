@@ -14,7 +14,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.accessory)
 
         let configuration = Configuration.load()
-        Log.app.info("Workspaces launching")
+        Log.app.info("AeroBar launching")
 
         let manager = WorkspaceManager(configuration: configuration)
         self.workspaceManager = manager

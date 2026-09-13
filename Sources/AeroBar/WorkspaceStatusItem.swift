@@ -313,7 +313,7 @@ final class WorkspaceStatusBarController {
         menu.addItem(loginItem)
 
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(withTitle: "Quit Workspaces", action: #selector(quitTapped), keyEquivalent: "q").target = self
+        menu.addItem(withTitle: "Quit AeroBar", action: #selector(quitTapped), keyEquivalent: "q").target = self
 
         item.menu = menu
         menuItem = item

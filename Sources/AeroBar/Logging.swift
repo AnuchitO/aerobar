@@ -4,7 +4,7 @@ import os
 /// Uses Apple's unified logging system (os.Logger) so output is visible in
 /// Console.app and via `log stream --predicate 'subsystem == "..."'`.
 enum Log {
-    private static let subsystem = "com.anuchito.Workspaces"
+    private static let subsystem = "com.anuchito.AeroBar"
 
     static let app = Logger(subsystem: subsystem, category: "app")
     static let client = Logger(subsystem: subsystem, category: "aerospace-client")
