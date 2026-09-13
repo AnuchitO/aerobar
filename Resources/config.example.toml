@@ -1,0 +1,39 @@
+# Example ~/.config/aerospace-menubar/config.toml
+#
+# This is NOT read from here -- copy what you want into
+# ~/.config/aerospace-menubar/config.toml, or use the "Open Configuration"
+# menu item (it's created automatically on first launch anyway, with
+# these defaults already in place).
+
+# Display order override, left to right. Leave this commented out (the
+# default) to auto-discover workspaces from `aerospace list-workspaces
+# --all` and order them 1..9, then 0, then anything else alphabetically --
+# so adding/removing workspaces in ~/.aerospace.toml is picked up
+# automatically (checked at launch and on "Refresh").
+# workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+
+# Title font size, in points. Also drives the default (auto) size of the
+# active-workspace badge -- see README section 9.
+font-size = 13
+
+# Extra room (points) added on each SIDE of every auto-sized button, i.e.
+# the gap BETWEEN adjacent buttons. 0 (the default) means no extra gap.
+# Ignored once `item-width` below is set.
+spacing = 0
+
+# Explicit total width (points) for every workspace button, overriding
+# the automatic font-size/spacing-based sizing. This changes ONLY the
+# button's own footprint (and the gray box macOS draws on click/hold) --
+# the digit/badge itself always stays at its normal font-size-driven
+# size, never scaled up or down by this. Set it narrower than the badge
+# needs and the badge is simply clipped at the button's edges rather than
+# shrunk. Leave commented out to use automatic sizing instead.
+# item-width = 20
+
+# Fixed number of workspace buttons to show, centered on the active one.
+# Leave unset (the default) to show everything on a normal display, or a
+# small fixed count next to a MacBook's camera notch.
+# max-visible-workspaces = 4
+
+# Uncomment and set if the app can't auto-detect your aerospace binary.
+# aerospace-path = "/opt/homebrew/bin/aerospace"
