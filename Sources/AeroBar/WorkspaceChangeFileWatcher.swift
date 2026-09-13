@@ -12,7 +12,7 @@ import Darwin
 /// The recommended config line is:
 ///
 ///   exec-on-workspace-change = ['/bin/sh', '-c',
-///     'printf "%s" "$AEROSPACE_FOCUSED_WORKSPACE" > "$HOME/.config/aerospace-menubar/current-workspace"'
+///     'printf "%s" "$AEROSPACE_FOCUSED_WORKSPACE" > "$HOME/.config/aerobar/current-workspace"'
 ///   ]
 ///
 /// Polling (WorkspaceManager's timer) keeps running underneath as a

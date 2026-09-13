@@ -89,7 +89,7 @@ with:
 exec-on-workspace-change = [
     '/bin/sh',
     '-c',
-    'printf "%s" "$AEROSPACE_FOCUSED_WORKSPACE" > "$HOME/.config/aerospace-menubar/current-workspace"',
+    'printf "%s" "$AEROSPACE_FOCUSED_WORKSPACE" > "$HOME/.config/aerobar/current-workspace"',
 ]
 ```
 
@@ -193,7 +193,7 @@ For full, literal control over the button's total width instead
 item-width = 20
 ```
 
-in `~/.config/aerospace-menubar/config.toml`. This changes ONLY the
+in `~/.config/aerobar/config.toml`. This changes ONLY the
 button's own footprint -- `spacing` is then ignored, and the
 digit/active-workspace badge is always drawn at its normal,
 font-size-driven size regardless of `item-width`, never scaled up or
@@ -212,7 +212,7 @@ appended alphabetically after. Add or remove a workspace in
 immediately via "Refresh").
 
 If you want a fixed, manual order instead, set it explicitly in
-`~/.config/aerospace-menubar/config.toml`:
+`~/.config/aerobar/config.toml`:
 
 ```toml
 workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
@@ -221,7 +221,7 @@ workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 which is then used exactly as written (never re-sorted) and stops
 auto-discovery.
 
-`~/.config/aerospace-menubar/config.toml` is created automatically, with
+`~/.config/aerobar/config.toml` is created automatically, with
 these defaults filled in, the first time the app runs (and on every
 subsequent launch, if it's ever missing) -- there's nothing to set up
 before editing it. Use the grid icon's **Open Configuration** menu item
@@ -231,7 +231,7 @@ to open it in your default editor, then **Refresh** to apply changes.
 
 The app searches, in order:
 
-1. `aerospace-path` in `~/.config/aerospace-menubar/config.toml`, if set.
+1. `aerospace-path` in `~/.config/aerobar/config.toml`, if set.
 2. `/opt/homebrew/bin/aerospace` (Homebrew, Apple Silicon)
 3. `/usr/local/bin/aerospace` (Homebrew, Intel)
 4. `/opt/local/bin/aerospace` (MacPorts)
@@ -269,7 +269,7 @@ changes, and whenever screen configuration changes (external display
 connected/disconnected, resolution change).
 
 To override the default count (e.g. if 4 is too many or too few for your
-setup), set it explicitly in `~/.config/aerospace-menubar/config.toml`:
+setup), set it explicitly in `~/.config/aerobar/config.toml`:
 
 ```toml
 max-visible-workspaces = 4
@@ -371,7 +371,7 @@ AeroBar/
 
 ```bash
 make uninstall   # or: rm -rf /Applications/AeroBar.app
-rm -rf ~/.config/aerospace-menubar
+rm -rf ~/.config/aerobar
 ```
 
 and change `exec-on-workspace-change` back in `~/.aerospace.toml`.

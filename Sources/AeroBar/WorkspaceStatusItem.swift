@@ -255,7 +255,7 @@ final class WorkspaceStatusBarController {
     }
 
     private func hoverLayer(for button: NSStatusBarButton) -> CALayer {
-        let name = "aerospace-menubar.hover"
+        let name = "aerobar.hover"
         if let existing = button.layer?.sublayers?.first(where: { $0.name == name }) {
             return existing
         }

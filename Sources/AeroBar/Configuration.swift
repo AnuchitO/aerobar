@@ -1,6 +1,6 @@
 import Foundation
 
-/// App configuration, loaded from ~/.config/aerospace-menubar/config.toml.
+/// App configuration, loaded from ~/.config/aerobar/config.toml.
 ///
 /// The parser below only understands the small subset of TOML this app
 /// needs (top-level `key = value` pairs, where value is a string, a bool,
@@ -54,7 +54,20 @@ struct Configuration {
     static var configDirectory: URL {
         FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent(".config", isDirectory: true)
+            .appendingPathComponent("aerobar", isDirectory: true)
+    }
+
+    /// The old, pre-rename config directory (~/.config/aerospace-menubar).
+    /// Kept only so `migrateLegacyConfigIfNeeded()` can carry an existing
+    /// config.toml over to the new location automatically.
+    static var legacyConfigDirectory: URL {
+        FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent(".config", isDirectory: true)
             .appendingPathComponent("aerospace-menubar", isDirectory: true)
+    }
+
+    static var legacyConfigFileURL: URL {
+        legacyConfigDirectory.appendingPathComponent("config.toml", isDirectory: false)
     }
 
     static var configFileURL: URL {
@@ -90,6 +103,9 @@ struct Configuration {
     static func ensureConfigFileExists() -> Bool {
         let fm = FileManager.default
         guard !fm.fileExists(atPath: configFileURL.path) else { return false }
+        if migrateLegacyConfigIfNeeded() {
+            return true
+        }
         do {
             try fm.createDirectory(at: configDirectory, withIntermediateDirectories: true)
             try defaultTemplateContents.write(to: configFileURL, atomically: true, encoding: .utf8)
@@ -97,6 +113,28 @@ struct Configuration {
             return true
         } catch {
             Log.config.error("Could not create default config: \(String(describing: error), privacy: .public)")
+            return false
+        }
+    }
+
+    /// One-time migration: if a config.toml exists at the old
+    /// ~/.config/aerospace-menubar location (from before the app was
+    /// renamed to AeroBar) and nothing exists yet at the new
+    /// ~/.config/aerobar location, copy it over automatically so settings
+    /// aren't lost. Best-effort and safe to call every launch -- a no-op
+    /// once the new file exists.
+    @discardableResult
+    static func migrateLegacyConfigIfNeeded() -> Bool {
+        let fm = FileManager.default
+        guard !fm.fileExists(atPath: configFileURL.path) else { return false }
+        guard fm.fileExists(atPath: legacyConfigFileURL.path) else { return false }
+        do {
+            try fm.createDirectory(at: configDirectory, withIntermediateDirectories: true)
+            try fm.copyItem(at: legacyConfigFileURL, to: configFileURL)
+            Log.config.info("Migrated legacy config from \(legacyConfigFileURL.path, privacy: .public) to \(configFileURL.path, privacy: .public)")
+            return true
+        } catch {
+            Log.config.error("Could not migrate legacy config: \(String(describing: error), privacy: .public)")
             return false
         }
     }

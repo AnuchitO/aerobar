@@ -1,7 +1,7 @@
-# Example ~/.config/aerospace-menubar/config.toml
+# Example ~/.config/aerobar/config.toml
 #
 # This is NOT read from here -- copy what you want into
-# ~/.config/aerospace-menubar/config.toml, or use the "Open Configuration"
+# ~/.config/aerobar/config.toml, or use the "Open Configuration"
 # menu item (it's created automatically on first launch anyway, with
 # these defaults already in place).
 
