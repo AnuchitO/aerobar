@@ -90,6 +90,24 @@ final class WorkspaceStatusBarController {
     /// seen -- at most a couple dozen entries in practice.
     private var badgeImageCache: [String: NSImage] = [:]
 
+    /// Memoizes the inactive-label font by size, for the same reason as
+    /// `badgeImageCache`: `NSFont.monospacedDigitSystemFont(ofSize:weight:)`
+    /// was being called fresh on every restyle of every inactive button
+    /// (i.e. on every workspace switch), even though it only ever depends
+    /// on `configuration.fontSize`, which changes rarely. Cleared
+    /// alongside `badgeImageCache` on config reload for the same reason.
+    private var inactiveLabelFontCache: [CGFloat: NSFont] = [:]
+
+    private func inactiveLabelFont() -> NSFont {
+        let size = CGFloat(configuration.fontSize)
+        if let cached = inactiveLabelFontCache[size] {
+            return cached
+        }
+        let font = NSFont.monospacedDigitSystemFont(ofSize: size, weight: .regular)
+        inactiveLabelFontCache[size] = font
+        return font
+    }
+
     /// Natural (auto-sized) visual size of the digit/badge: font-size
     /// plus the default padding above.
     private var naturalBadgeDiameter: CGFloat {
@@ -163,6 +181,7 @@ final class WorkspaceStatusBarController {
         // that small amount of memory promptly instead of leaving it
         // until the entries would naturally stop being read.
         badgeImageCache.removeAll()
+        inactiveLabelFontCache.removeAll()
         rebuildIfNeeded(force: true)
         applyStyles()
     }
@@ -254,11 +273,10 @@ final class WorkspaceStatusBarController {
         } else {
             button.image = nil
             button.imagePosition = .noImage
-            let font = NSFont.monospacedDigitSystemFont(ofSize: configuration.fontSize, weight: .regular)
             let textColor: NSColor = isReachable ? .secondaryLabelColor : .tertiaryLabelColor
             button.attributedTitle = NSAttributedString(
                 string: name,
-                attributes: [.font: font, .foregroundColor: textColor]
+                attributes: [.font: inactiveLabelFont(), .foregroundColor: textColor]
             )
         }
 
