@@ -80,6 +80,16 @@ final class WorkspaceStatusBarController {
     /// plays no part at all.
     private static let defaultBadgePadding: CGFloat = 10
 
+    /// Memoizes `badgeImage(for:side:)` by its exact inputs. Drawing the
+    /// badge is a pure function of `text` and `side` (same inputs always
+    /// produce the same pixels), so caching here is safe: it only avoids
+    /// re-rendering a bitmap that would come out identical, and any
+    /// input change (e.g. a font-size edit changing `side`) naturally
+    /// produces a new cache key rather than a stale hit. Bounded in size
+    /// by the number of distinct (workspace name, badge size) pairs ever
+    /// seen -- at most a couple dozen entries in practice.
+    private var badgeImageCache: [String: NSImage] = [:]
+
     /// Natural (auto-sized) visual size of the digit/badge: font-size
     /// plus the default padding above.
     private var naturalBadgeDiameter: CGFloat {
@@ -119,8 +129,12 @@ final class WorkspaceStatusBarController {
     }
 
     /// Creates the status items and the menu item. Call once at launch.
+    private var isScreenObserverRegistered = false
+
     func build() {
         buildMenuItemIfNeeded()
+        guard !isScreenObserverRegistered else { return }
+        isScreenObserverRegistered = true
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(screenParametersChanged),
@@ -144,6 +158,11 @@ final class WorkspaceStatusBarController {
     /// Re-reads configuration (e.g. after "Refresh") and rebuilds.
     func applyConfiguration(_ configuration: Configuration) {
         self.configuration = configuration
+        // Old entries are keyed by a now-superseded badge size and would
+        // never be hit again anyway; dropping them here just reclaims
+        // that small amount of memory promptly instead of leaving it
+        // until the entries would naturally stop being read.
+        badgeImageCache.removeAll()
         rebuildIfNeeded(force: true)
         applyStyles()
     }
@@ -223,8 +242,8 @@ final class WorkspaceStatusBarController {
             // text layer plus a separate background layer), so there is
             // no draw-order ambiguity that could let a background paint
             // over the text -- what you see is exactly the one bitmap.
-            let side = min(button.bounds.height - 4, badgeDrawSize)
-            button.image = badgeImage(for: name, side: max(12, side))
+            let side = max(12, min(button.bounds.height - 4, badgeDrawSize))
+            button.image = cachedBadgeImage(for: name, side: side)
             button.imagePosition = .imageOnly
             // .scaleNone: draw the badge at its true size always, even if
             // the button (item-width) is narrower than it -- AppKit's
@@ -270,6 +289,16 @@ final class WorkspaceStatusBarController {
     /// own Input Source glyph icons. `isTemplate` is left false so it
     /// renders in true white/black rather than being tinted/vibrancy-
     /// adjusted like a template icon.
+    private func cachedBadgeImage(for text: String, side: CGFloat) -> NSImage {
+        let key = "\(text)-\(Int(side.rounded()))"
+        if let cached = badgeImageCache[key] {
+            return cached
+        }
+        let image = badgeImage(for: text, side: side)
+        badgeImageCache[key] = image
+        return image
+    }
+
     private func badgeImage(for text: String, side: CGFloat) -> NSImage {
         let size = NSSize(width: side, height: side)
         let image = NSImage(size: size, flipped: false) { rect in
